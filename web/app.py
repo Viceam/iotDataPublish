@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import joblib
 import numpy as np
 from pytorch_tabnet.tab_model import TabNetClassifier
+import pandas as pd
 
 # 初始化 Flask 应用
 app = Flask(__name__)
@@ -23,14 +24,20 @@ def predict():
     vibration = data.get('vibration')
     humidity = data.get('humidity')
 
+    features = pd.DataFrame(
+        [[temperature, pressure, vibration, humidity]],
+        columns=['temperature', 'pressure', 'vibration', 'humidity']
+    )
+    scaled_features = scaler.transform(features)  # 传递DataFrame
+
     if temperature is None or pressure is None or vibration is None or humidity is None:
         return jsonify({'error': 'Missing required features'}), 400
 
     # 将输入特征组合成一个数组
-    features = np.array([[temperature, pressure, vibration, humidity]])
-
-    # 标准化输入特征
-    scaled_features = scaler.transform(features)
+    # features = np.array([[temperature, pressure, vibration, humidity]])
+    #
+    # # 标准化输入特征
+    # scaled_features = scaler.transform(features)
 
     # 使用模型进行预测
     prediction = model.predict(scaled_features)
@@ -40,4 +47,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
