@@ -61,14 +61,14 @@ def main():
     try:
         while True:
             for index, row in df.iterrows():
-                is_abnormal = random.random() < 0.05  # 10% 概率触发异常
+                is_abnormal = random.random() < 0.05  # 5% 概率触发异常
                 data = {
                     "device_id": f"sensor_{index}",
                     "timestamp": datetime.now(ZoneInfo("Asia/Shanghai")).isoformat(),
                     "temperature": generate_value(float(row['temperature']), "temperature", is_abnormal),
                     "pressure": generate_value(float(row['pressure']), "pressure", is_abnormal),
                     "vibration": generate_value(float(row['vibration']), "vibration", is_abnormal),
-                    "humidity": generate_value(float(row['humidity']), "humidity", is_abnormal),
+                    "humidity": generate_value(float(row['humidity']), "humidity", False),
                     "equipment": row['equipment'],
                     "location": row['location'],
                     "faulty": int(row['faulty']),

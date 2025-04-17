@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package prediction;
+
+service PredictionService {
+  rpc Predict(PredictionRequest) returns (PredictionResponse);
+}
+
+message PredictionRequest {
+  double temperature = 1;
+  double pressure = 2;
+  double vibration = 3;
+  double humidity = 4;
+}
+
+message PredictionResponse {
+  int32 faulty = 1;
+}
